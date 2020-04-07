@@ -7,7 +7,7 @@ from selenium_utils import screenshot
 import json
 from seleniumwire import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-
+from htmllogger.Htmllogger import HTMlLogger
 
 class RegistrationTest(unittest.TestCase):
 
@@ -18,18 +18,20 @@ class RegistrationTest(unittest.TestCase):
         else:
             self.driver = webdriver.Chrome(ChromeDriverManager().install())
 
-    def test_search_in_python_org(self):
+    def test_registration_in_python_org(self):
 
 
         driver = self.driver
         with open('../Data/data.json') as json_file:
+            self.logger = HTMlLogger('C:/Users/user/PycharmProjects/Selenium03')
             data = json.load(json_file)
             driver.get('http://demo.guru99.com/test/newtours/')
             # debug_request(driver)
             driver.save_screenshot('./ScreenShots/sc1.png')
             driver.set_page_load_timeout(20)
             m = Home(driver)
-            m.getRegister().click()
+            m.getRegister(driver).click()
+            self.logger.assert_step_log("Navigated successfully to the register page")
             r = Register(driver)
             r.setFirstName(data['firstname'], driver)
             r.setLastName(data['lastname'], driver)
